@@ -1,29 +1,51 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
-  </div>
+  <v-app>
+    <div class="div__main">
+      <search-card :is-loading="isLoading" />
+      <v-scroll-y-transition>
+        <company-details-card
+          v-if="!isLoading && stockOverview.ticker"
+          :ticker="stockOverview.ticker"
+          :company-name="stockOverview.companyName"
+          :description="stockOverview.description"
+          :revenue="stockOverview.revenue"
+          :ev-to-ebitda="stockOverview.evToEbitda"
+          :return-on-equity="stockOverview.returnOnEquity"
+          :dividend-yield="stockOverview.dividendYield"
+        />
+      </v-scroll-y-transition>
+    </div>
+  </v-app>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-import HelloWorld from "./components/HelloWorld.vue";
+import Vue from 'vue';
+import { mapGetters } from 'vuex';
 
-@Component({
-  components: {
-    HelloWorld,
-  },
-})
-export default class App extends Vue {}
+import SearchCard from '@/components/SearchCard.vue';
+import CompanyDetailsCard from '@/components/CompanyDetailsCard.vue';
+
+export default Vue.extend({
+  name: 'App',
+  components: { SearchCard, CompanyDetailsCard },
+  computed: {
+    ...mapGetters(['stockOverview', 'isLoading'])
+  }
+});
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<style scoped>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.div__main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding-top: 60px;
 }
 </style>
