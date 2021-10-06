@@ -1,20 +1,12 @@
 <template>
   <v-app>
-    <div class="div__main">
-      <search-card :is-loading="isLoading" />
+    <separator />
+    <v-container>
+      <search-card :is-loading="isLoading" @on-send="setHasSended" />
       <v-scroll-y-transition>
-        <company-details-card
-          v-if="!isLoading && stockOverview.ticker"
-          :ticker="stockOverview.ticker"
-          :company-name="stockOverview.companyName"
-          :description="stockOverview.description"
-          :revenue="stockOverview.revenue"
-          :ev-to-ebitda="stockOverview.evToEbitda"
-          :return-on-equity="stockOverview.returnOnEquity"
-          :dividend-yield="stockOverview.dividendYield"
-        />
+        <company-overview-card v-if="!isLoading && hasSended" />
       </v-scroll-y-transition>
-    </div>
+    </v-container>
   </v-app>
 </template>
 
@@ -22,30 +14,40 @@
 import Vue from 'vue';
 import { mapGetters } from 'vuex';
 
-import SearchCard from '@/components/SearchCard.vue';
-import CompanyDetailsCard from '@/components/CompanyDetailsCard.vue';
+import Separator from '@/components/layout/Separator.vue';
+import SearchCard from '@/components/base/SearchCard.vue';
+import CompanyOverviewCard from '@/components/base/CompanyOverviewCard.vue';
 
 export default Vue.extend({
   name: 'App',
-  components: { SearchCard, CompanyDetailsCard },
+  components: { Separator, SearchCard, CompanyOverviewCard },
+  data() {
+    return {
+      hasSended: false
+    };
+  },
   computed: {
-    ...mapGetters(['stockOverview', 'isLoading'])
+    ...mapGetters('overview', ['isLoading'])
+  },
+  methods: {
+    setHasSended(value: boolean) {
+      this.hasSended = value;
+    }
   }
 });
 </script>
 
-<style scoped>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;600&display=swap');
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-.div__main {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  padding-top: 60px;
+#app {
+  font-family: 'Roboto Slab', sans-serif;
+  background-color: var(--v-background-base);
 }
 </style>
