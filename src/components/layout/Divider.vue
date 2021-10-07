@@ -1,15 +1,15 @@
 <template>
   <transition>
-    <div class="separator">
-      <div class="separator__logo">
-        <em>v-stocks</em>
+    <div class="divider">
+      <div class="divider__logo">
+        <em>v&#8209;stocks</em>
       </div>
     </div>
   </transition>
 </template>
 
 <style scoped>
-.separator {
+.divider {
   width: 100vw;
   height: 40vh;
 
@@ -20,7 +20,7 @@
   animation: slide-in 1.3s ease-out;
 }
 
-.separator__logo {
+.divider__logo {
   width: 10rem;
 
   margin: 1rem 2rem;

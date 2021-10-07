@@ -1,10 +1,13 @@
 <template>
   <v-app>
-    <separator />
+    <Divider />
     <v-container>
-      <search-card :is-loading="isLoading" @on-send="setHasSended" />
+      <SearchCard :is-loading="overviewIsLoading" @on-send="setHasSended" />
       <v-scroll-y-transition>
-        <company-overview-card v-if="!isLoading && hasSended" />
+        <CompanyOverviewCard v-if="!overviewIsLoading && hasSended" />
+      </v-scroll-y-transition>
+      <v-scroll-y-transition>
+        <CompanyStockCard v-if="!timeSeriesIsLoading && hasSended" />
       </v-scroll-y-transition>
     </v-container>
   </v-app>
@@ -14,20 +17,26 @@
 import Vue from 'vue';
 import { mapGetters } from 'vuex';
 
-import Separator from '@/components/layout/Separator.vue';
+import Divider from '@/components/layout/Divider.vue';
 import SearchCard from '@/components/base/SearchCard.vue';
 import CompanyOverviewCard from '@/components/base/CompanyOverviewCard.vue';
+import CompanyStockCard from '@/components/base/CompanyStockCard.vue';
 
 export default Vue.extend({
   name: 'App',
-  components: { Separator, SearchCard, CompanyOverviewCard },
+  components: { Divider, SearchCard, CompanyOverviewCard, CompanyStockCard },
   data() {
     return {
       hasSended: false
     };
   },
   computed: {
-    ...mapGetters('overview', ['isLoading'])
+    ...mapGetters('overview', {
+      overviewIsLoading: 'isLoading'
+    }),
+    ...mapGetters('timeSeries', {
+      timeSeriesIsLoading: 'isLoading'
+    })
   },
   methods: {
     setHasSended(value: boolean) {

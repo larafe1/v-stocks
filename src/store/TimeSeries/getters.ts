@@ -10,6 +10,9 @@ export default {
   stockDaily(state) {
     return state.stockDaily;
   },
+  stockWeekly(state) {
+    return state.stockWeekly;
+  },
   stockMonthly(state) {
     return state.stockMonthly;
   }

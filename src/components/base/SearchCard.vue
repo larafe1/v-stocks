@@ -65,6 +65,10 @@ export default Vue.extend({
       //   exchange: this.selectedExchange
       // };
       this.$store.dispatch('overview/fetchCompanyOverview', this.enteredSymbol);
+      this.$store.dispatch(
+        'timeSeries/fetchStockTimeSeriesWeekly',
+        this.enteredSymbol
+      );
       this.$emit('on-send', true);
       this.enteredSymbol = '';
     }
