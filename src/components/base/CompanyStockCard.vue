@@ -76,13 +76,14 @@ export default Vue.extend({
         lastRefreshed: value['Meta Data']['3. Last Refreshed'],
         timeZone: value['Meta Data']['4. Time Zone']
       };
+
+      const [lastRefreshedDate] = metaData.lastRefreshed.split(' ');
       const price = {
-        open: +value['Weekly Time Series'][metaData.lastRefreshed]['1. open'],
-        low: +value['Weekly Time Series'][metaData.lastRefreshed]['3. low'],
-        high: +value['Weekly Time Series'][metaData.lastRefreshed]['2. high'],
-        close: +value['Weekly Time Series'][metaData.lastRefreshed]['4. close'],
-        volume:
-          +value['Weekly Time Series'][metaData.lastRefreshed]['5. volume']
+        open: +value['Weekly Time Series'][lastRefreshedDate]['1. open'],
+        low: +value['Weekly Time Series'][lastRefreshedDate]['3. low'],
+        high: +value['Weekly Time Series'][lastRefreshedDate]['2. high'],
+        close: +value['Weekly Time Series'][lastRefreshedDate]['4. close'],
+        volume: +value['Weekly Time Series'][lastRefreshedDate]['5. volume']
       };
 
       return {
