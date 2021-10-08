@@ -2,9 +2,15 @@
   <v-app>
     <Divider />
     <v-container>
-      <SearchCard :is-loading="overviewIsLoading" @on-send="setHasSended" />
+      <SearchCard
+        :is-loading="overviewIsLoading"
+        @on-send="setHasSended"
+        @on-change="parseStockExchange"
+      />
       <v-scroll-y-transition>
-        <CompanyOverviewCard v-if="!overviewIsLoading && hasSended" />
+        <CompanyOverviewCard
+          v-if="!overviewIsLoading && hasSended && isDefaultStockExchange"
+        />
       </v-scroll-y-transition>
       <v-scroll-y-transition>
         <CompanyStockCard v-if="!timeSeriesIsLoading && hasSended" />
@@ -27,7 +33,8 @@ export default Vue.extend({
   components: { Divider, SearchCard, CompanyOverviewCard, CompanyStockCard },
   data() {
     return {
-      hasSended: false
+      hasSended: false,
+      isDefaultStockExchange: true
     };
   },
   computed: {
@@ -41,6 +48,10 @@ export default Vue.extend({
   methods: {
     setHasSended(value: boolean) {
       this.hasSended = value;
+    },
+    parseStockExchange(value: string) {
+      if (value === 'US') return;
+      this.isDefaultStockExchange = false;
     }
   }
 });

@@ -1,5 +1,10 @@
 import { ActionContext } from 'vuex';
 
+export interface IPayload {
+  symbol: string;
+  stockExchange: string;
+}
+
 export interface ICompanyOverview {
   Symbol: string;
   AssetType: string;
@@ -132,25 +137,25 @@ export interface ITimeSeriesMutations {
 export interface IOverviewActions {
   fetchCompanyOverview: (
     context: ActionContext<ICompanyOverview, unknown>,
-    payload: string
+    payload: IPayload
   ) => void;
 }
 
 export interface ITimeSeriesActions {
   fetchStockTimeSeriesIntraday: (
     context: ActionContext<IStockTimeSeries, unknown>,
-    payload: string
+    payload: IPayload
   ) => void;
   fetchStockTimeSeriesDaily: (
     context: ActionContext<IStockTimeSeries, unknown>,
-    payload: string
+    payload: IPayload
   ) => void;
   fetchStockTimeSeriesWeekly: (
     context: ActionContext<IStockTimeSeries, unknown>,
-    payload: string
+    payload: IPayload
   ) => void;
   fetchStockTimeSeriesMonthly: (
     context: ActionContext<IStockTimeSeries, unknown>,
-    payload: string
+    payload: IPayload
   ) => void;
 }

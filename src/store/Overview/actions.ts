@@ -1,17 +1,18 @@
 import axios, { AxiosResponse, AxiosError } from 'axios';
 
 import config from '@/config';
-import { IOverviewActions } from '@/types';
+import { IOverviewActions, ICompanyOverview } from '@/types';
 
 export default {
   async fetchCompanyOverview(context, payload) {
-    if (!payload) return console.log('No payload provided.');
+    if (!payload) return console.log('Payload not provided.');
 
     context.commit('setIsLoading', true);
-    const customParams = `query?function=OVERVIEW&symbol=${payload}&apikey=${config.alphaVantageToken}`;
+    const symbolParsed = payload.symbol + payload.stockExchange;
+    const customParams = `query?function=OVERVIEW&symbol=${symbolParsed}&apikey=${config.alphaVantageToken}`;
     await axios
       .get(config.alphaVantageBaseUrl + customParams)
-      .then(({ data }: AxiosResponse) => {
+      .then(({ data }: AxiosResponse<ICompanyOverview>) => {
         context.commit('setCompanyOverview', data);
       })
       .catch((err: AxiosError) => {

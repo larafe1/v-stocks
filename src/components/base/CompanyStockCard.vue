@@ -106,9 +106,7 @@ export default Vue.extend({
 
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
-
-  border-right: 1px solid #ccc;
+  justify-content: center;
 }
 
 .graph-container {

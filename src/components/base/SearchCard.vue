@@ -28,7 +28,7 @@
             label="Company Symbol"
             v-model="enteredSymbol"
           />
-          <v-radio-group class="mx-9" v-model="selectedExchange">
+          <v-radio-group class="mx-9" v-model="selectedStockExchange">
             <v-radio label="US Stock" value="US" color="greenLighter" />
             <v-radio label="BR Stock" value="SA" color="greenLighter" />
           </v-radio-group>
@@ -36,7 +36,7 @@
             large
             class="ml-8 white--text"
             color="greenLighter"
-            @click="handleFetchCompanyOverview"
+            @click="handleFetchCompanyData"
           >
             Search
           </v-btn>
@@ -49,28 +49,31 @@
 <script lang="ts">
 import Vue from 'vue';
 
+import { IPayload } from '@/types';
+
 export default Vue.extend({
   name: 'SearchCard',
   props: ['isLoading'],
   data() {
     return {
       enteredSymbol: '',
-      selectedExchange: 'US'
+      selectedStockExchange: 'US'
     };
   },
   methods: {
-    handleFetchCompanyOverview() {
-      // const payload = {
-      //   symbol: this.enteredSymbol,
-      //   exchange: this.selectedExchange
-      // };
-      this.$store.dispatch('overview/fetchCompanyOverview', this.enteredSymbol);
-      this.$store.dispatch(
-        'timeSeries/fetchStockTimeSeriesWeekly',
-        this.enteredSymbol
-      );
+    handleFetchCompanyData() {
+      const payload: IPayload = {
+        symbol: this.enteredSymbol,
+        stockExchange: this.selectedStockExchange === 'SA' ? '.SA' : ''
+      };
+
+      this.$store.dispatch('overview/fetchCompanyOverview', payload);
+      this.$store.dispatch('timeSeries/fetchStockTimeSeriesWeekly', payload);
       this.$emit('on-send', true);
+      this.$emit('on-change', this.selectedStockExchange as string);
+
       this.enteredSymbol = '';
+      this.selectedStockExchange = 'US';
     }
   }
 });
