@@ -1,7 +1,8 @@
 <template>
   <v-row>
-    <v-col class="mx-auto mt-12" cols="7">
+    <v-col class="mx-auto mt-12" cols="8">
       <v-card
+        v-if="company.Name.length > 0"
         class="d-flex flex-column align-center justify-space-between"
         elevation="4"
       >
@@ -11,29 +12,39 @@
           {{ company.Exchange }}
         </v-card-subtitle>
         <v-card-text>{{ company.Description }}</v-card-text>
-        <div class="separator" />
-        <v-container class="d-flex">
-          <v-container class="d-flex flex-column flex-1 align-center">
-            <ul>
-              <li>Sector: {{ parseSector }}</li>
-              <li>Country: {{ company.Country }}</li>
-              <li>Currency: {{ company.Currency }}</li>
-              <li>Exchange: {{ company.Exchange }}</li>
-              <li>Asset Type: {{ company.AssetType }}</li>
-              <li>Fiscal Year End: {{ company.FiscalYearEnd }}</li>
-            </ul>
-          </v-container>
-          <v-container class="d-flex flex-column flex-1 align-center">
-            <ul class="">
-              <li>Revenue: {{ parseRevenue }}</li>
-              <li>EV/EBITDA: {{ company.EVToEBITDA }}</li>
-              <li>Price To Book (P/B): {{ company.PriceToBookRatio }}</li>
-              <li>Price To Earnings (P/E): {{ company.PERatio }}</li>
-              <li>Return On Equity (ROE): {{ parseReturnOnEquity }}</li>
-              <li>Dividend Yield (DY): {{ company.DividendYield }}%</li>
-            </ul>
-          </v-container>
-        </v-container>
+        <v-expansion-panels>
+          <v-expansion-panel>
+            <v-expansion-panel-header>
+              Advanced Company Information
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <v-container class="d-flex">
+                <v-container class="d-flex flex-column flex-1 align-center">
+                  <ul>
+                    <li>Sector: {{ sector }}</li>
+                    <li>Country: {{ company.Country }}</li>
+                    <li>Currency: {{ company.Currency }}</li>
+                    <li>Exchange: {{ company.Exchange }}</li>
+                    <li>Asset Type: {{ company.AssetType }}</li>
+                    <li>Fiscal Year End: {{ company.FiscalYearEnd }}</li>
+                  </ul>
+                </v-container>
+                <v-container class="d-flex flex-column flex-1 align-center">
+                  <ul class="">
+                    <li>Revenue: {{ revenue }}</li>
+                    <li>EV/EBITDA: {{ company.EVToEBITDA }}x</li>
+                    <li>
+                      Price To Book (P/B): {{ company.PriceToBookRatio }}x
+                    </li>
+                    <li>Price To Earnings (P/E): {{ company.PERatio }}x</li>
+                    <li>Return On Equity (ROE): {{ returnOnEquity }}%</li>
+                    <li>Dividend Yield (DY): {{ company.DividendYield }}%</li>
+                  </ul>
+                </v-container>
+              </v-container>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
       </v-card>
     </v-col>
   </v-row>
@@ -42,45 +53,27 @@
 <script lang="ts">
 import Vue from 'vue';
 
+import { capitalizeText, parseNumber } from '@/utils/FormatValues';
 import { ICompanyOverview } from '@/types';
 
 export default Vue.extend({
   name: 'CompanyOverviewCard',
   computed: {
     company() {
-      const companyData = this.$store.getters[
+      return this.$store.getters[
         'overview/companyOverview'
-      ] as unknown;
-      return companyData as ICompanyOverview;
+      ] as ICompanyOverview;
     },
-    parseSector() {
+    sector() {
       const lowerValue: string = this.company.Sector.toLowerCase();
-      const parsedValue =
-        lowerValue.charAt(0).toUpperCase() + lowerValue.slice(1);
-      return parsedValue;
+      return capitalizeText(lowerValue);
     },
-    parseRevenue() {
-      const parsedValue: string = new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD'
-      }).format(this.company.RevenueTTM);
-      return parsedValue;
+    revenue() {
+      return parseNumber(this.company.RevenueTTM, 'USD');
     },
-    parseReturnOnEquity() {
-      const parsedValue =
-        (+this.company.ReturnOnEquityTTM * 100).toFixed(2) + '%';
-      return parsedValue;
+    returnOnEquity() {
+      return (+this.company.ReturnOnEquityTTM * 100).toFixed(2);
     }
   }
 });
 </script>
-
-<style scoped>
-.separator {
-  width: 80%;
-
-  margin-top: 12px;
-
-  border-top: 1px solid #ccc;
-}
-</style>

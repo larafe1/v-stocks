@@ -5,15 +5,15 @@ export default {
     state.isLoading = payload;
   },
   setStockTimeSeriesIntraday(state, payload) {
-    state.stockIntraday = { ...payload };
+    state.stockIntraday = payload;
   },
   setStockTimeSeriesDaily(state, payload) {
-    state.stockDaily = { ...payload };
+    state.stockDaily = payload;
   },
   setStockTimeSeriesWeekly(state, payload) {
-    state.stockWeekly = { ...payload };
+    state.stockWeekly = payload;
   },
   setStockTimeSeriesMonthly(state, payload) {
-    state.stockMonthly = { ...payload };
+    state.stockMonthly = payload;
   }
 } as ITimeSeriesMutations;

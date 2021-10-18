@@ -30,6 +30,7 @@
   font-size: 64px;
 
   color: white;
+  font-weight: 700;
   background: var(--v-greenLighter-base);
 }
 

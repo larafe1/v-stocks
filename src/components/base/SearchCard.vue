@@ -10,7 +10,7 @@
           justify-space-between
           align-center
         "
-        width="740"
+        width="765"
         height="105"
         elevation="8"
       >
@@ -68,7 +68,7 @@ export default Vue.extend({
       };
 
       this.$store.dispatch('overview/fetchCompanyOverview', payload);
-      this.$store.dispatch('timeSeries/fetchStockTimeSeriesWeekly', payload);
+      this.$store.dispatch('timeSeries/fetchStockTimeSeriesDaily', payload);
       this.$emit('on-send', true);
       this.$emit('on-change', this.selectedStockExchange as string);
 

@@ -3,18 +3,18 @@
     <Divider />
     <v-container>
       <SearchCard
-        :is-loading="overviewIsLoading"
+        :is-loading="overviewIsLoading && timeSeriesIsLoading"
         @on-send="setHasSended"
         @on-change="parseStockExchange"
       />
       <v-scroll-y-transition>
         <CompanyOverviewCard
-          v-if="!overviewIsLoading && hasSended && isDefaultStockExchange"
+          v-if="hasSended && !overviewIsLoading && isDefaultStockExchange"
         />
       </v-scroll-y-transition>
-      <v-scroll-y-transition>
-        <CompanyStockCard v-if="!timeSeriesIsLoading && hasSended" />
-      </v-scroll-y-transition>
+      <v-fade-transition>
+        <CompanyStockCard v-if="hasSended" v-show="!timeSeriesIsLoading" />
+      </v-fade-transition>
     </v-container>
   </v-app>
 </template>
